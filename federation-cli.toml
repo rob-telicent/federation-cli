@@ -1,0 +1,6 @@
+apiKey = "blahblahblahblah"
+clientId = "telicent.io"
+server = "federation.devops.telicent-sandbox.telicent.live"
+key = "./certs/client.example.com.key"
+cert = "./certs/client.example.com.crt"
+cacert = "./certs/isrgrootx1.pem"
