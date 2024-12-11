@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"telicent.io/federation-cli/pkg/api/v1alpha"
@@ -59,11 +58,7 @@ func runConsume(cmd *cobra.Command, args []string) {
 			panic(err)
 		}
 
-		fmt.Println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-		spew.Dump(msg.Topic)
-		spew.Dump(msg.Key)
-		spew.Dump(msg.Shared)
-		spew.Dump(msg.Value)
+		prettyPrint(msg)
 	}
 }
 
@@ -83,4 +78,20 @@ func topicRequest(c commonConfig, ff *pflag.FlagSet) (*v1alpha.TopicRequest, err
 	tr.Offset = offset
 
 	return tr, nil
+}
+
+func prettyPrint(msg *v1alpha.KafkaByteBatch) {
+
+	fmt.Println("-----BEGIN MESSAGE-----")
+	fmt.Printf("Message: offset(%d)\n", msg.Offset)
+	fmt.Println("Headers:")
+	for _, h := range msg.Shared {
+		fmt.Printf("\t%s: %s\n", h.Key, h.Value)
+	}
+	fmt.Println("Body:")
+	fmt.Println()
+	fmt.Println(string(msg.Value))
+	fmt.Println()
+	fmt.Println("-----END MESSAGE-----")
+	fmt.Println()
 }
